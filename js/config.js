@@ -7,8 +7,7 @@ const CONFIG = {
   GOOGLE_SCRIPT_URL: 'https://script.google.com/macros/s/AKfycbxvyHGSUZ8JCODRbRD89XuiA7WF3VpQOLZ2PBNUrAOruEWr8mG8dEHhryWVh9hYPhNEOQ/exec',
 
   APP_NAME:      'Artist Workstation Audit',
-  COMPANY_NAME:  'Creative Studio',
-  LOGO_INITIALS: 'CS',
+  COMPANY_NAME:  'House of Blue Beans',
 
   ITEMS_PER_PAGE: 15,
 
