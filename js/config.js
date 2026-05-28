@@ -35,7 +35,6 @@ const CONFIG = {
     'Product Animation',
     'Unreal Engine Environment',
     'Unreal Engine Animation',
-    'Unreal Engine Rendering',
     'Others'
   ],
 
