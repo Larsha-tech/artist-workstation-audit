@@ -247,7 +247,10 @@ body {
 .char-counter { font-size: .75rem; color: #475569; text-align: right; margin-top: .35rem; }
 
 /* ── Fade-in animation ────────────────────────────────────── */
-.form-section { opacity: 0; transform: translateY(18px); }
+/* Sections are visible by default — JS adds .animate-ready before observing */
+/* so if JS fails, content is still visible */
+.form-section { opacity: 1; }
+.form-section.animate-ready { opacity: 0; transform: translateY(18px); }
 .form-section.visible { animation: fadeInUp .5s ease forwards; }
 @keyframes fadeInUp { to { opacity: 1; transform: translateY(0); } }
 

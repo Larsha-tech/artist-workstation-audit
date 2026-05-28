@@ -107,10 +107,13 @@ function setupCharCounter() {
 // ── Section entrance animation ─────────────────────────────────────────────
 
 function animateSections() {
+  const sections = document.querySelectorAll('.form-section');
+  // Mark ready for animation — done here in JS so sections stay visible if JS fails
+  sections.forEach(s => s.classList.add('animate-ready'));
   const obs = new IntersectionObserver(entries => {
     entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); }});
-  }, { threshold: .08 });
-  document.querySelectorAll('.form-section').forEach(s => obs.observe(s));
+  }, { threshold: 0.05 });
+  sections.forEach(s => obs.observe(s));
 }
 
 // ── Submit ─────────────────────────────────────────────────────────────────
