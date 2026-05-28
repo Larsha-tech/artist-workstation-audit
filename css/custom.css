@@ -243,6 +243,55 @@ body {
   background: radial-gradient(ellipse, rgba(124,58,237,.14) 0%, transparent 70%);
 }
 
+/* ── Project chip / tag input ─────────────────────────────── */
+.chip-input-wrapper {
+  border: 1px solid rgba(255,255,255,.1);
+  border-radius: .625rem;
+  padding: .625rem .75rem;
+  background: rgba(255,255,255,.04);
+  display: flex; flex-direction: column; gap: .5rem;
+  transition: all .2s ease;
+}
+.chip-input-wrapper:focus-within {
+  border-color: #7c3aed;
+  background: rgba(124,58,237,.05);
+  box-shadow: 0 0 0 3px rgba(124,58,237,.15);
+}
+.chip-tags {
+  display: flex; flex-wrap: wrap; gap: .5rem;
+}
+.chip-tags:empty { display: none; }
+.chip {
+  display: inline-flex; align-items: center; gap: .4rem;
+  padding: .3rem .75rem; border-radius: 9999px;
+  background: rgba(124,58,237,.18); border: 1px solid rgba(124,58,237,.3);
+  color: #c4b5fd; font-size: .8125rem; font-weight: 500;
+  animation: chipPop .2s cubic-bezier(.34,1.56,.64,1);
+}
+@keyframes chipPop { from { transform: scale(.7); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+.chip-remove {
+  background: none; border: none; padding: 0; margin: 0;
+  cursor: pointer; color: #a78bfa; font-size: 1.1rem;
+  line-height: 1; opacity: .6; transition: all .15s;
+  display: flex; align-items: center; font-family: inherit;
+}
+.chip-remove:hover { opacity: 1; color: #f87171; }
+.chip-input-row { display: flex; gap: .5rem; align-items: center; }
+.chip-text-input {
+  flex: 1; background: none; border: none; outline: none;
+  color: #e2e8f0; font-size: .9375rem; font-family: inherit;
+  padding: .25rem 0; min-width: 0;
+}
+.chip-text-input::placeholder { color: rgba(148,163,184,.4); }
+.chip-add-btn {
+  width: 2rem; height: 2rem; border-radius: .5rem; flex-shrink: 0;
+  background: rgba(124,58,237,.2); border: 1px solid rgba(124,58,237,.3);
+  color: #a78bfa; font-size: 1.3rem; line-height: 1; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: all .18s ease; font-family: inherit;
+}
+.chip-add-btn:hover { background: rgba(124,58,237,.35); color: #c4b5fd; transform: scale(1.08); }
+
 /* ── Char counter ─────────────────────────────────────────── */
 .char-counter { font-size: .75rem; color: #475569; text-align: right; margin-top: .35rem; }
 

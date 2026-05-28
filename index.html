@@ -168,20 +168,37 @@
             <div class="section-icon" aria-hidden="true">📋</div>
             <div>
               <div class="section-title">Project Details</div>
-              <div class="section-subtitle">Tell us about your current and upcoming projects</div>
+              <div class="section-subtitle">Add each project name separately — you can add as many as needed</div>
             </div>
           </div>
 
           <div class="space-y-5">
+            <!-- Current Projects chip input -->
             <div>
-              <label class="form-label" for="currentProject">Current Project</label>
-              <input type="text" id="currentProject" name="currentProject"
-                     class="form-input" placeholder="What are you working on right now?">
+              <label class="form-label">Current Projects</label>
+              <div class="chip-input-wrapper">
+                <div class="chip-tags" id="currentProjectChips"></div>
+                <div class="chip-input-row">
+                  <input type="text" id="currentProjectInput" class="chip-text-input"
+                         placeholder="Type a project name then press Enter or +">
+                  <button type="button" id="currentProjectAddBtn" class="chip-add-btn" aria-label="Add project">+</button>
+                </div>
+              </div>
+              <p class="text-xs text-slate-600 mt-1.5">Press <span style="font-family:monospace;background:rgba(255,255,255,.06);padding:.1rem .35rem;border-radius:.25rem;">Enter</span> or <span style="font-family:monospace;background:rgba(255,255,255,.06);padding:.1rem .35rem;border-radius:.25rem;">+</span> to add each project</p>
             </div>
+
+            <!-- Future Projects chip input -->
             <div>
-              <label class="form-label" for="futureProjects">Future Projects</label>
-              <input type="text" id="futureProjects" name="futureProjects"
-                     class="form-input" placeholder="What upcoming projects or deliverables are planned?">
+              <label class="form-label">Future Projects</label>
+              <div class="chip-input-wrapper">
+                <div class="chip-tags" id="futureProjectChips"></div>
+                <div class="chip-input-row">
+                  <input type="text" id="futureProjectInput" class="chip-text-input"
+                         placeholder="Type a project name then press Enter or +">
+                  <button type="button" id="futureProjectAddBtn" class="chip-add-btn" aria-label="Add future project">+</button>
+                </div>
+              </div>
+              <p class="text-xs text-slate-600 mt-1.5">Press <span style="font-family:monospace;background:rgba(255,255,255,.06);padding:.1rem .35rem;border-radius:.25rem;">Enter</span> or <span style="font-family:monospace;background:rgba(255,255,255,.06);padding:.1rem .35rem;border-radius:.25rem;">+</span> to add each project</p>
             </div>
           </div>
         </div>

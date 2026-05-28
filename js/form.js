@@ -9,6 +9,7 @@ function initForm() {
   renderCheckboxGroup('projectTypeCheckboxes', CONFIG.PROJECT_TYPE_OPTIONS,  'projectType', 'projectTypeOtherContainer');
   renderCheckboxGroup('hardwareIssuesCheckboxes', CONFIG.HARDWARE_ISSUES,    'hwIssue',     null);
 
+  setupChipInputs();
   setupHardwareToggle();
   setupValidation();
   setupCharCounter();
@@ -53,6 +54,51 @@ function renderCheckboxGroup(containerId, options, name, otherContainerId) {
     label.appendChild(span);
     container.appendChild(label);
   });
+}
+
+// ── Project chip inputs ────────────────────────────────────────────────────
+
+function setupChipInputs() {
+  [['currentProject', 'currentProjectAddBtn'], ['futureProject', 'futureProjectAddBtn']].forEach(([group, btnId]) => {
+    const input = document.getElementById(`${group}Input`);
+    const btn   = document.getElementById(btnId);
+    input?.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); addChip(group); } });
+    btn?.addEventListener('click', () => addChip(group));
+  });
+}
+
+function addChip(group) {
+  const input     = document.getElementById(`${group}Input`);
+  const container = document.getElementById(`${group}Chips`);
+  if (!input || !container) return;
+  const val = input.value.trim();
+  if (!val) return;
+
+  const chip = document.createElement('div');
+  chip.className = 'chip';
+
+  const label = document.createElement('span');
+  label.textContent = val;
+
+  const remove = document.createElement('button');
+  remove.type = 'button';
+  remove.className = 'chip-remove';
+  remove.setAttribute('aria-label', 'Remove');
+  remove.textContent = '×';
+  remove.addEventListener('click', () => chip.remove());
+
+  chip.appendChild(label);
+  chip.appendChild(remove);
+  container.appendChild(chip);
+
+  input.value = '';
+  input.focus();
+}
+
+function getChips(group) {
+  const container = document.getElementById(`${group}Chips`);
+  if (!container) return '';
+  return [...container.querySelectorAll('span')].map(s => s.textContent.trim()).filter(Boolean).join(', ');
 }
 
 // ── Hardware toggle ────────────────────────────────────────────────────────
@@ -193,8 +239,8 @@ function collectFormData() {
     role:            document.getElementById('role').value.trim(),
     software:        sw.join(', '),
     projectTypes:    pt.join(', '),
-    currentProject:  document.getElementById('currentProject').value.trim(),
-    futureProjects:  document.getElementById('futureProjects').value.trim(),
+    currentProject:  getChips('currentProject'),
+    futureProjects:  getChips('futureProject'),
     hardwareHandles: document.querySelector('input[name="hardwareHandles"]:checked')?.value || '',
     hardwareIssues:  hwIssues.join(', '),
     additionalNotes: document.getElementById('additionalNotes').value.trim()
@@ -250,6 +296,8 @@ function resetUIState() {
   document.getElementById('hardwareIssuesSection')?.classList.remove('show');
   document.getElementById('softwareOtherContainer')?.classList.remove('show');
   document.getElementById('projectTypeOtherContainer')?.classList.remove('show');
+  document.getElementById('currentProjectChips')?.replaceChildren();
+  document.getElementById('futureProjectChips')?.replaceChildren();
   const counter = document.getElementById('notesCounter');
   if (counter) { counter.textContent = '0 / 1000'; counter.style.color = '#475569'; }
 }
