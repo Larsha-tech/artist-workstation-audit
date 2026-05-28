@@ -207,11 +207,11 @@ async function sendData(data) {
   }
   await fetch(CONFIG.GOOGLE_SCRIPT_URL, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(data),
     mode: 'no-cors'
+    // no Content-Type header — 'application/json' is blocked in no-cors mode
+    // Apps Script reads e.postData.contents regardless of content type
   });
-  // no-cors → opaque response; treat as success
 }
 
 // ── UI helpers ─────────────────────────────────────────────────────────────
