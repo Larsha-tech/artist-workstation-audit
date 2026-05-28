@@ -49,8 +49,8 @@ const CONFIG = {
 
   // Column headers — must match Code.gs order
   ADMIN_COLUMNS: [
-    'Timestamp', 'Employee Name', 'Role', 'Department',
+    'Timestamp', 'Employee Name', 'Role / Designation', 'Department / Team',
     'Software Used', 'Project Types', 'Current Project',
-    'Future Projects', 'PC OK?', 'Hardware Issues', 'Notes'
+    'Future Projects', 'PC Handles Work?', 'Hardware Issues', 'Additional Notes'
   ]
 };
