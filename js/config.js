@@ -4,7 +4,7 @@
 
 const CONFIG = {
   // ⚠️  Paste your deployed Google Apps Script Web App URL here
-  GOOGLE_SCRIPT_URL: 'YOUR_GOOGLE_APPS_SCRIPT_URL_HERE',
+  GOOGLE_SCRIPT_URL: 'https://script.google.com/macros/s/AKfycbxvyHGSUZ8JCODRbRD89XuiA7WF3VpQOLZ2PBNUrAOruEWr8mG8dEHhryWVh9hYPhNEOQ/exec',
 
   APP_NAME:      'Artist Workstation Audit',
   COMPANY_NAME:  'Creative Studio',
