@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard | Artist Workstation Audit</title>
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>tailwind.config = { darkMode: 'class', theme: { extend: {} } }</script>
+
+  <!-- SheetJS for Excel export -->
+  <script src="https://unpkg.com/xlsx/dist/xlsx.full.min.js"></script>
+
+  <!-- Custom theme -->
+  <link rel="stylesheet" href="css/custom.css">
+</head>
+
+<body class="min-h-screen" style="background:#070711;">
+
+  <!-- ── Ambient background ───────────────────────────────────────────── -->
+  <div class="fixed inset-0 animated-bg pointer-events-none" aria-hidden="true"></div>
+
+  <div class="relative min-h-screen flex flex-col">
+
+    <!-- ══════════════════════════════════════════════════════════════════
+         ADMIN NAV
+    ══════════════════════════════════════════════════════════════════ -->
+    <nav class="admin-nav">
+      <div class="max-w-screen-xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-4">
+
+        <!-- Left: Logo + title -->
+        <div class="flex items-center gap-3 min-w-0">
+          <div class="w-8 h-8 rounded-lg flex items-center justify-center text-xs font-bold text-purple-300 flex-shrink-0"
+               style="background:rgba(124,58,237,.3);">CS</div>
+          <div class="min-w-0">
+            <div class="text-sm font-semibold text-slate-200 truncate">Workstation Audit</div>
+            <div class="text-xs text-slate-600 truncate hidden sm:block">Admin Dashboard</div>
+          </div>
+        </div>
+
+        <!-- Right: Actions -->
+        <div class="flex items-center gap-2 flex-shrink-0">
+          <button id="refreshBtn" class="export-btn export-btn-refresh" title="Refresh data">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+              <path d="M23 4v6h-6M1 20v-6h6"/><path d="M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15"/>
+            </svg>
+            <span class="hidden sm:inline">Refresh</span>
+          </button>
+          <button id="exportCsvBtn" class="export-btn export-btn-csv" title="Export to CSV">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+              <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>
+            </svg>
+            <span class="hidden sm:inline">CSV</span>
+          </button>
+          <button id="exportXlsxBtn" class="export-btn export-btn-xlsx" title="Export to Excel">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+              <rect x="2" y="3" width="20" height="18" rx="2"/><path d="M2 9h20M9 21V9"/>
+            </svg>
+            <span class="hidden sm:inline">Excel</span>
+          </button>
+          <a href="index.html"
+             class="export-btn"
+             style="background:rgba(255,255,255,.04); color:#94a3b8; border-color:rgba(255,255,255,.1);">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+              <path d="M19 12H5M12 5l-7 7 7 7"/>
+            </svg>
+            <span class="hidden sm:inline">Form</span>
+          </a>
+        </div>
+
+      </div>
+    </nav>
+
+    <!-- ══════════════════════════════════════════════════════════════════
+         DEMO BANNER (hidden if real URL is configured)
+    ══════════════════════════════════════════════════════════════════ -->
+    <div id="demo-banner" class="hidden flex-shrink-0">
+      <div class="max-w-screen-xl mx-auto px-4 sm:px-6 py-2.5">
+        <div class="flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm"
+             style="background:rgba(245,158,11,.08); border:1px solid rgba(245,158,11,.2);">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fcd34d" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 8v5M12 16h.01" stroke-linecap="round"/></svg>
+          <span class="text-amber-300 font-medium">Demo mode</span>
+          <span class="text-amber-600">— showing sample data. Set <code class="font-mono text-amber-400">GOOGLE_SCRIPT_URL</code> in <code class="font-mono text-amber-400">js/config.js</code> to load real submissions.</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════════════════════════
+         MAIN CONTENT
+    ══════════════════════════════════════════════════════════════════ -->
+    <main class="flex-1 max-w-screen-xl w-full mx-auto px-4 sm:px-6 py-8">
+
+      <!-- Page title -->
+      <div class="mb-8">
+        <h1 class="text-2xl sm:text-3xl font-bold text-slate-100" style="letter-spacing:-.02em;">
+          Submission Dashboard
+        </h1>
+        <p class="text-slate-500 text-sm mt-1">All artist workstation audit responses — search, filter, and export</p>
+      </div>
+
+      <!-- ── Stats grid ────────────────────────────────────────────── -->
+      <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+
+        <div class="stat-card">
+          <div class="flex items-start justify-between mb-3">
+            <div class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Total Submissions</div>
+            <div class="w-8 h-8 rounded-lg flex items-center justify-center text-base"
+                 style="background:rgba(124,58,237,.15);">📊</div>
+          </div>
+          <div id="stat-total" class="text-3xl font-bold text-slate-100">—</div>
+          <div class="text-xs text-slate-600 mt-1">Audit responses collected</div>
+        </div>
+
+        <div class="stat-card">
+          <div class="flex items-start justify-between mb-3">
+            <div class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Need Attention</div>
+            <div class="w-8 h-8 rounded-lg flex items-center justify-center text-base"
+                 style="background:rgba(239,68,68,.12);">⚠️</div>
+          </div>
+          <div id="stat-issues" class="text-3xl font-bold text-red-400">—</div>
+          <div id="issues-pct" class="text-xs text-slate-600 mt-1">Hardware issues reported</div>
+        </div>
+
+        <div class="stat-card">
+          <div class="flex items-start justify-between mb-3">
+            <div class="text-xs font-semibold text-slate-500 uppercase tracking-wider">This Week</div>
+            <div class="w-8 h-8 rounded-lg flex items-center justify-center text-base"
+                 style="background:rgba(16,185,129,.12);">📅</div>
+          </div>
+          <div id="stat-week" class="text-3xl font-bold text-emerald-400">—</div>
+          <div class="text-xs text-slate-600 mt-1">New responses (last 7 days)</div>
+        </div>
+
+        <div class="stat-card">
+          <div class="flex items-start justify-between mb-3">
+            <div class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Top Software</div>
+            <div class="w-8 h-8 rounded-lg flex items-center justify-center text-base"
+                 style="background:rgba(6,182,212,.12);">🏆</div>
+          </div>
+          <div id="stat-software" class="text-lg font-bold text-cyan-400 truncate">—</div>
+          <div class="text-xs text-slate-600 mt-1">Most used across team</div>
+        </div>
+
+      </div>
+
+      <!-- ── Search & Filter bar ───────────────────────────────────── -->
+      <div class="glass-card rounded-2xl p-4 sm:p-5 mb-5">
+        <div class="flex flex-col sm:flex-row gap-3 items-stretch sm:items-center">
+
+          <!-- Search -->
+          <div class="relative flex-1 min-w-0">
+            <svg class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 pointer-events-none"
+                 width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+            </svg>
+            <input id="searchInput" type="search" class="search-input"
+                   placeholder="Search by name, role, department, software…"
+                   aria-label="Search submissions">
+          </div>
+
+          <!-- Department filter -->
+          <div class="relative flex-shrink-0">
+            <select id="deptFilter" class="filter-select pr-8" aria-label="Filter by department">
+              <option value="">All Departments</option>
+            </select>
+            <svg class="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-500 pointer-events-none"
+                 width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+              <polyline points="6 9 12 15 18 9"/>
+            </svg>
+          </div>
+
+          <!-- Hardware filter -->
+          <div class="relative flex-shrink-0">
+            <select id="hwFilter" class="filter-select pr-8" aria-label="Filter by hardware status">
+              <option value="">All PC Status</option>
+              <option value="yes">PC OK — Yes</option>
+              <option value="sometimes">PC OK — Sometimes</option>
+              <option value="no">PC OK — No</option>
+            </select>
+            <svg class="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-500 pointer-events-none"
+                 width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+              <polyline points="6 9 12 15 18 9"/>
+            </svg>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Result count -->
+      <div class="flex items-center justify-between mb-3 px-1">
+        <div class="text-sm text-slate-500">
+          Showing <span id="totalCount" class="text-slate-300 font-medium">—</span> results
+        </div>
+        <div class="text-xs text-slate-600">Click any row to view full details</div>
+      </div>
+
+      <!-- ── Data table ────────────────────────────────────────────── -->
+      <div class="table-wrapper mb-5">
+        <table class="admin-table" role="grid" aria-label="Workstation audit submissions">
+          <thead>
+            <tr>
+              <th>Timestamp</th>
+              <th>Employee</th>
+              <th>Role</th>
+              <th>Department</th>
+              <th class="hide-mobile">Software</th>
+              <th class="hide-mobile">Project Types</th>
+              <th class="hide-mobile">Current Project</th>
+              <th>PC OK?</th>
+              <th class="hide-mobile">HW Issues</th>
+              <th>Details</th>
+            </tr>
+          </thead>
+          <tbody id="adminTableBody">
+            <!-- Populated by admin.js -->
+          </tbody>
+        </table>
+      </div>
+
+      <!-- ── Pagination ─────────────────────────────────────────────── -->
+      <div id="pagination" class="flex items-center justify-center gap-1.5 mb-10" role="navigation" aria-label="Table pagination">
+        <!-- Populated by admin.js -->
+      </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="text-center py-5 flex-shrink-0"
+            style="border-top:1px solid rgba(255,255,255,.05);">
+      <p class="text-xs text-slate-700">
+        Artist Workstation Audit &bull; Admin View &bull; Creative Studio IT Department
+      </p>
+    </footer>
+
+  </div><!-- /relative wrapper -->
+
+  <!-- ══════════════════════════════════════════════════════════════════
+       DETAIL MODAL
+  ══════════════════════════════════════════════════════════════════ -->
+  <div id="detailModal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="detailName">
+    <div class="modal-card" style="max-width:42rem; text-align:left; max-height:90vh; overflow-y:auto;">
+
+      <!-- Modal header -->
+      <div class="flex items-center justify-between mb-5 pb-4"
+           style="border-bottom:1px solid rgba(255,255,255,.07);">
+        <div>
+          <div class="text-xs text-slate-500 uppercase tracking-widest mb-1">Submission Detail</div>
+          <h2 id="detailName" class="text-lg font-bold text-slate-100">—</h2>
+        </div>
+        <button onclick="closeDetail()"
+          class="w-8 h-8 rounded-lg flex items-center justify-center text-slate-500 hover:text-slate-300 transition-colors"
+          style="background:rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.08);"
+          aria-label="Close">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+            <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Modal body (populated by admin.js) -->
+      <div id="detailBody" class="space-y-0">
+        <!-- detail rows inserted here -->
+      </div>
+
+      <!-- Modal footer -->
+      <div class="pt-5 mt-4" style="border-top:1px solid rgba(255,255,255,.06);">
+        <button onclick="closeDetail()"
+          class="w-full py-2.5 rounded-xl text-sm font-medium text-slate-400 transition-all hover:text-slate-200"
+          style="background:rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.08);">
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="js/config.js"></script>
+  <script src="js/admin.js"></script>
+</body>
+</html>

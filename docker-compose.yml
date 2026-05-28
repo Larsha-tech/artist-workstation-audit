@@ -1,0 +1,7 @@
+services:
+  audit-app:
+    build: .
+    container_name: workstation-audit
+    ports:
+      - "8080:80"
+    restart: unless-stopped
