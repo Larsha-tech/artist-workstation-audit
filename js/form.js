@@ -72,7 +72,7 @@ function setupHardwareToggle() {
 // ── Real-time validation ───────────────────────────────────────────────────
 
 function setupValidation() {
-  ['employeeName', 'role', 'department'].forEach(id => {
+  ['employeeName', 'role'].forEach(id => {
     const el = document.getElementById(id);
     el.addEventListener('blur',  () => validateTextField(el));
     el.addEventListener('input', () => { if (el.classList.contains('error')) validateTextField(el); });
@@ -138,7 +138,7 @@ async function handleSubmit(e) {
 function validateAll() {
   let ok = true;
 
-  ['employeeName', 'role', 'department'].forEach(id => {
+  ['employeeName', 'role'].forEach(id => {
     if (!validateTextField(document.getElementById(id))) ok = false;
   });
 
@@ -188,7 +188,6 @@ function collectFormData() {
     timestamp:       ts,
     employeeName:    document.getElementById('employeeName').value.trim(),
     role:            document.getElementById('role').value.trim(),
-    department:      document.getElementById('department').value.trim(),
     software:        sw.join(', '),
     projectTypes:    pt.join(', '),
     currentProject:  document.getElementById('currentProject').value.trim(),
