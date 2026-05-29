@@ -175,7 +175,7 @@
           <div class="space-y-5">
             <!-- Current Projects chip input -->
             <div>
-              <label class="form-label">Primary Projects</label>
+              <label class="form-label">Primary Project Names <span class="required" aria-hidden="true">*</span></label>
               <div class="chip-input-wrapper">
                 <div class="chip-tags" id="currentProjectChips"></div>
                 <div class="chip-input-row">
@@ -185,11 +185,15 @@
                 </div>
               </div>
               <p class="text-xs text-slate-600 mt-1.5">Press <span style="font-family:monospace;background:rgba(255,255,255,.06);padding:.1rem .35rem;border-radius:.25rem;">Enter</span> or <span style="font-family:monospace;background:rgba(255,255,255,.06);padding:.1rem .35rem;border-radius:.25rem;">+</span> to add each project</p>
+              <div id="currentProject-error" class="error-msg hidden mt-1" role="alert">
+                <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><circle cx="6" cy="6" r="5.5" stroke="#f87171"/><path d="M6 3.5v3M6 8h.01" stroke="#f87171" stroke-linecap="round"/></svg>
+                Please add at least one Primary Project Name
+              </div>
             </div>
 
             <!-- Secondary Projects chip input -->
             <div>
-              <label class="form-label">Secondary Projects</label>
+              <label class="form-label">Secondary Project Names <span class="required" aria-hidden="true">*</span></label>
               <div class="chip-input-wrapper">
                 <div class="chip-tags" id="futureProjectChips"></div>
                 <div class="chip-input-row">
@@ -199,6 +203,10 @@
                 </div>
               </div>
               <p class="text-xs text-slate-600 mt-1.5">Press <span style="font-family:monospace;background:rgba(255,255,255,.06);padding:.1rem .35rem;border-radius:.25rem;">Enter</span> or <span style="font-family:monospace;background:rgba(255,255,255,.06);padding:.1rem .35rem;border-radius:.25rem;">+</span> to add each project</p>
+              <div id="futureProject-error" class="error-msg hidden mt-1" role="alert">
+                <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><circle cx="6" cy="6" r="5.5" stroke="#f87171"/><path d="M6 3.5v3M6 8h.01" stroke="#f87171" stroke-linecap="round"/></svg>
+                Please add at least one Secondary Project Name
+              </div>
             </div>
           </div>
         </div>

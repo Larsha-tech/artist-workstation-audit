@@ -91,6 +91,10 @@ function addChip(group) {
   chip.appendChild(remove);
   container.appendChild(chip);
 
+  // Clear validation error as soon as first chip is added
+  const err = document.getElementById(`${group}-error`);
+  if (err) err.classList.add('hidden');
+
   input.value = '';
   input.focus();
 }
@@ -195,6 +199,14 @@ function validateAll() {
   const swErr = document.getElementById('software-error');
   if (swChecked === 0) { if (swErr) swErr.classList.remove('hidden'); ok = false; }
   else { if (swErr) swErr.classList.add('hidden'); }
+
+  // Primary & Secondary project names required
+  ['currentProject', 'futureProject'].forEach(group => {
+    const chips = document.getElementById(`${group}Chips`)?.querySelectorAll('span').length || 0;
+    const err   = document.getElementById(`${group}-error`);
+    if (chips === 0) { if (err) err.classList.remove('hidden'); ok = false; }
+    else             { if (err) err.classList.add('hidden'); }
+  });
 
   const hwSel = document.querySelector('input[name="hardwareHandles"]:checked');
   const hwErr = document.getElementById('hardwareHandles-error');
